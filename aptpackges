@@ -1,0 +1,3 @@
+sudo apt install alsa-utils
+sudo apt install mpg123
+sudo apt install mpv
