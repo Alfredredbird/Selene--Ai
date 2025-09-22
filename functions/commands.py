@@ -84,6 +84,12 @@ def handle_command(command, NAME,speaker_name):
          return "Hi there! How can I help?"
         else:
          return f"Hello {speaker_name}! How can I help?"
+    
+    elif "bye" in command or "exit" in command or "quit" in command or "goodbye" in command:
+        if speaker_name == None:
+         return "Goodbye?"
+        else:
+         return f"Goodbye {speaker_name}!"
         
     elif "help" in command:
         help_text = "Here are the commands you can use:\n"

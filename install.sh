@@ -3,6 +3,7 @@
 # Variables
 DEST="$HOME/.selene"
 SERVICE_NAME="selene.service"
+SERVICE_FILE="$HOME/.config/systemd/user/$SERVICE_NAME"
 LOG_FILE="$DEST/selene.log"
 
 echo "[*] Creating destination directory..."
@@ -35,41 +36,42 @@ else
     echo "[*] Virtual environment already exists"
 fi
 
-# Step 3: Install Python packages (only once)
+# Step 3: Install Python packages
 echo "[*] Installing Python dependencies..."
 "$DEST/venv/bin/pip" install --upgrade pip
 "$DEST/venv/bin/pip" install pexpect sounddevice yt-dlp asyncio numpy pydub
 
-# Step 4: Create systemd service
-SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
+# Step 4: Create user systemd service
+mkdir -p "$HOME/.config/systemd/user"
 
-if [ ! -f "$SERVICE_FILE" ]; then
-    echo "[*] Creating systemd service..."
-    sudo bash -c "cat > $SERVICE_FILE" <<EOL
+echo "[*] Creating user systemd service..."
+cat > "$SERVICE_FILE" <<EOL
 [Unit]
 Description=Selene AI Assistant
-After=network.target
+After=network.target sound.target
 
 [Service]
 Type=simple
-User=$USER
 WorkingDirectory=$DEST
-ExecStart=/bin/bash -c 'source $DEST/venv/bin/activate && python3 $DEST/main.py >> $LOG_FILE 2>&1'
+ExecStart=$DEST/venv/bin/python3 $DEST/main.py
 Restart=on-failure
+StandardOutput=append:$LOG_FILE
+StandardError=append:$LOG_FILE
+Environment="XDG_RUNTIME_DIR=/run/user/$(id -u)"
+Environment="PULSE_SERVER=unix:/run/user/$(id -u)/pulse/native"
 
 [Install]
 WantedBy=default.target
 EOL
 
-    echo "[*] Reloading systemd daemon..."
-    sudo systemctl daemon-reload
+# Step 5: Reload and enable service
+echo "[*] Reloading user systemd daemon..."
+systemctl --user daemon-reload
 
-    echo "[*] Enabling Selene service to start on boot..."
-    sudo systemctl enable $SERVICE_NAME
-else
-    echo "[*] Systemd service already exists"
-fi
+echo "[*] Enabling Selene service to start on login..."
+systemctl --user enable "$SERVICE_NAME"
 
 echo "[*] Installation complete!"
-echo "Start Selene: sudo systemctl start $SERVICE_NAME"
+echo "Start Selene: systemctl --user start $SERVICE_NAME"
+echo "Check status : systemctl --user status $SERVICE_NAME"
 echo "Logs will be saved to: $LOG_FILE"

@@ -2,16 +2,19 @@
 
 DEST="$HOME/.selene"
 SERVICE_NAME="selene.service"
+SERVICE_FILE="$HOME/.config/systemd/user/$SERVICE_NAME"
 
 echo "[*] Stopping Selene service..."
-sudo systemctl stop $SERVICE_NAME
+systemctl --user stop "$SERVICE_NAME"
 
 echo "[*] Disabling Selene service..."
-sudo systemctl disable $SERVICE_NAME
+systemctl --user disable "$SERVICE_NAME"
 
-echo "[*] Removing systemd service file..."
-sudo rm -f /etc/systemd/system/$SERVICE_NAME
-sudo systemctl daemon-reload
+echo "[*] Removing user systemd service file..."
+rm -f "$SERVICE_FILE"
+
+echo "[*] Reloading user systemd daemon..."
+systemctl --user daemon-reload
 
 echo "[*] Removing Selene directory..."
 rm -rf "$DEST"

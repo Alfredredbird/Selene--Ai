@@ -12,8 +12,8 @@ from functions.stt import *
 from functions.security import *
 from functions.recorder import *
 
-WAKE_WORDS = ["selene", "celine", "saline", "selena"]
-NAME = "Selene"
+WAKE_WORDS = ["Luna", "luna", "loona", "luna"]
+NAME = "Luna"
 WAKE_PHRASES = [f"hey {NAME}", f"hello {NAME}", f"good day {NAME}"]
 
 def main():
@@ -59,6 +59,8 @@ def main():
                 if command:
                     response = handle_command(command, NAME, speaker_name)
                     speak(response, True)
+                    if "bye" in command or "exit" in command or "quit" in command or "goodbye" in command:
+                        exit(1) 
                 else:
                     if speaker_name:
                         speak(f"Yes {speaker_name}?", True)
