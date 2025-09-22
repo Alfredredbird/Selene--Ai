@@ -6,7 +6,7 @@ import subprocess
 import re
 import json
 import pexpect
-from tts import speak
+from functions.tts import speak
 import multiprocessing
 import threading
 import random

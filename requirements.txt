@@ -5,3 +5,8 @@ asyncio
 threading
 numpy
 pydub
+identify
+json
+psutil
+pathlib
+platform

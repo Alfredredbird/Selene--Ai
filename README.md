@@ -86,6 +86,11 @@ Coming soon
 * threading
 * numpy
 * pydub
+* identify
+* json
+* psutil
+* pathlib
+* platform
 ---
 
 # 🗣️ Supported Languages

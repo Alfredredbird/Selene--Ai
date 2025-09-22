@@ -1,0 +1,10 @@
+{
+  "Hello! I'm your voice assistant.": {
+    "path": "audios/hello_im_your_voice_assistant.wav",
+    "created": "2025-09-22 13:13:20"
+  },
+  "It is 13:13": {
+    "path": "audios/it_is_13:13.wav",
+    "created": "2025-09-22 13:13:30"
+  }
+}

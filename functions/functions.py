@@ -10,7 +10,7 @@ from bleak import BleakScanner
 import asyncio
 import time
 import re
-from tts import speak
+from functions.tts import speak
 from mutagen import File
 import random
 import sounddevice as sd
@@ -20,7 +20,7 @@ import numpy as np
 import os
 from resemblyzer import VoiceEncoder, preprocess_wav
 from pydub import AudioSegment
-from stt import listen
+from functions.stt import listen
 
 
 CONFIG_FOLDER = "config"

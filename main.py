@@ -1,15 +1,17 @@
 from functions.stt import listen
-from .functionstts import speak
-from commands import handle_command
-from functions import cleanup_old_recordings, scan_ble, extract_song_metadata
-from identify import identify_speaker  
+from functions.tts import speak
+from functions.commands import handle_command
+from functions.functions import cleanup_old_recordings, scan_ble, extract_song_metadata
+from functions.identify import identify_speaker  
 import asyncio
 import threading
 from functions.tts import *
-from functools.stt import *
+from functions.stt import *
+from functions.security import *
 
 WAKE_WORD = "selene"
-WAKE_WORD2 = "selene"
+# sometimes it picks up the second wake word depending on your accesnt
+WAKE_WORD2 = "celine"
 NAME = "Selene"
 WAKE_PHRASE = f"hey {NAME}"
 WAKE_PHRASE2 = f"hello {NAME}"
@@ -17,6 +19,10 @@ WAKE_PHRASE3 = f"good day {NAME}"
 
 def main():
     cleanup_old_recordings()
+
+    if not collect_system_info():
+        pass 
+
     try:
         speak("Hello! I'm your voice assistant.", True)
         while True:
