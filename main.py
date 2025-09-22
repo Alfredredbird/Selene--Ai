@@ -1,3 +1,5 @@
+from functions.recorder import start_audio_recording, start_screen_recording, stop_all_recording, clip_last_30_seconds, start_recording
+
 from functions.stt import listen
 from functions.tts import speak
 from functions.commands import handle_command
@@ -8,7 +10,7 @@ import threading
 from functions.tts import *
 from functions.stt import *
 from functions.security import *
-
+from functions.recorder import *
 
 WAKE_WORDS = ["selene", "celine", "saline", "selena"]
 NAME = "Selene"
@@ -16,6 +18,11 @@ WAKE_PHRASES = [f"hey {NAME}", f"hello {NAME}", f"good day {NAME}"]
 
 def main():
     cleanup_old_recordings()
+    cleanup_old_recordings("data/voice_clips")
+    cleanup_old_recordings("data/screen_recordings")
+    # this is for the screen clipping. its laggy so its disabled now
+    # start_recording()
+    # print("[INFO] Background recording started.")
 
     if not collect_system_info():
         pass 

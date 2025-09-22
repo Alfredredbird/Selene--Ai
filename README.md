@@ -103,6 +103,7 @@ Coming soon
 
 # 📕 Upcoming Features
 
+* [X] Screen clipping 
 * [ ] Custom TTS Engine
 * [ ] Advanced Security Monitoring
 * [ ] Tookie OSINT Integration

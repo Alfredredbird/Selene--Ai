@@ -6,6 +6,7 @@ import subprocess
 import re
 import json
 import pexpect
+from functions.recorder import clip_last_30_seconds
 from functions.tts import speak
 import multiprocessing
 import threading
@@ -15,6 +16,8 @@ import sounddevice as sd
 import soundfile as sf
 from yt_dlp import YoutubeDL
 from functions.functions import *
+from functions.recorder import *
+
 
 music_process = None
 current_genre = None
@@ -59,6 +62,15 @@ def handle_command(command, NAME,speaker_name):
     command = command.lower()
 
     
+    if "clip that" in command:
+        try:
+            clip_last_30_seconds() 
+            if speaker_name:
+                return f"{speaker_name}, the last 30 seconds have been clipped and saved."
+            else:
+                return "The last 30 seconds have been clipped and saved."
+        except Exception as e:
+            return f"Failed to clip audio: {str(e)}"
 
 
     if "what is the time" in command or "what time is it" in command:
