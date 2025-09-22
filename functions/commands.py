@@ -128,6 +128,12 @@ def handle_command(command, NAME,speaker_name):
         songs = getFiles("data/music")
         return f"I found {', '.join(songs)} in your library"
 
+    elif any(kw in command for kw in ["open home", "open downloads", "open documents",
+                                  "open pictures", "open videos", "open public",
+                                  "open templates", "open snap", "open desktop"]):
+        return open_directory(command)
+
+
     elif "play" in command:
      command = command.replace("music", "")
      parts = command.split("play", 1)

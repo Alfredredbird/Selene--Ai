@@ -269,6 +269,34 @@ def detect_voice(audio, threshold=0.01):
     energy = np.sqrt(np.mean(audio**2))
     return energy > threshold
 
+def open_directory(command):
+    """
+    Opens common directories based on the command.
+    """
+    home = os.path.expanduser("~")
+    directories = {
+        "home": home,
+        "downloads": os.path.join(home, "Downloads"),
+        "documents": os.path.join(home, "Documents"),
+        "pictures": os.path.join(home, "Pictures"),
+        "videos": os.path.join(home, "Videos"),
+        "public": os.path.join(home, "Public"),
+        "templates": os.path.join(home, "Templates"),
+        "snap": os.path.join(home, "snap"),
+        "desktop": os.path.join(home, "Desktop")
+    }
+
+    command = command.lower().strip()
+    for key, path in directories.items():
+        if key in command:
+            if os.path.exists(path):
+                subprocess.Popen(["xdg-open", path])
+                return f"Opening {key} folder."
+            else:
+                return f"{key.capitalize()} folder does not exist."
+    return "I couldn't recognize which folder to open."
+
+
 def record_phrase(prompt, filename, max_retries=3, duration=4, samplerate=44100):
     retries = 0
     while retries < max_retries:
