@@ -9,13 +9,10 @@ from functions.tts import *
 from functions.stt import *
 from functions.security import *
 
-WAKE_WORD = "selene"
-# sometimes it picks up the second wake word depending on your accesnt
-WAKE_WORD2 = "celine"
+
+WAKE_WORDS = ["selene", "celine", "saline", "selena"]
 NAME = "Selene"
-WAKE_PHRASE = f"hey {NAME}"
-WAKE_PHRASE2 = f"hello {NAME}"
-WAKE_PHRASE3 = f"good day {NAME}"
+WAKE_PHRASES = [f"hey {NAME}", f"hello {NAME}", f"good day {NAME}"]
 
 def main():
     cleanup_old_recordings()
@@ -41,29 +38,35 @@ def main():
             else:
                 print("Unknown speaker.")
 
-
             print("=====================================")
             print(f"Heard: {command}")
             print("=====================================")
 
-            if WAKE_WORD in command or WAKE_WORD2 in command:
-                command = command.replace(WAKE_WORD, "").replace(WAKE_WORD2, "").strip()
+            # Check if any wake word is in the command
+            detected_wake_word = next((word for word in WAKE_WORDS if word in command), None)
+
+            if detected_wake_word:
+                # Remove the wake word from the command
+                command = command.replace(detected_wake_word, "").strip()
+
                 if command:
-                    response = handle_command(command, NAME,speaker_name)
+                    response = handle_command(command, NAME, speaker_name)
                     speak(response, True)
                 else:
                     if speaker_name:
-                     speak(f"Yes {speaker_name}?", True)
+                        speak(f"Yes {speaker_name}?", True)
                     else:
-                     speak("Yes?", True)
+                        speak("Yes?", True)
             else:
                 print("Wake word not detected.")
+
             cleanup_old_recordings()
 
     except KeyboardInterrupt:
         print("Assistant stopped by user.")
     except Exception as e:
         print(f"Unexpected error: {e}")
+
 
 if __name__ == "__main__":
     main()

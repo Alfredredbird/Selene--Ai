@@ -5,7 +5,7 @@ import psutil
 from pathlib import Path
 from functions.tts import *
 
-SYSTEM_INFO_FILE = Path.home() / ".selene_system_info.json"
+SYSTEM_INFO_FILE = Path.home() / ".selene/.selene_system_info.json"
 
 def collect_system_info():
     """Collects system info and compares it to previous info if exists."""

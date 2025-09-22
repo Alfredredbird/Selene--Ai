@@ -13,14 +13,41 @@ import random
 import time
 import sounddevice as sd
 import soundfile as sf
-from functions import *
 from yt_dlp import YoutubeDL
-from functions import *
+from functions.functions import *
 
 music_process = None
 current_genre = None
 current_song = None
 alarm_process = None
+
+#  available commands
+COMMANDS_LIST = [
+    "what is the time / what time is it - Tells you the current time",
+    "hello - Greets you",
+    "who am i - Tells you your name if remembered",
+    "who are you / intro - Introduces the assistant",
+    "search wikipedia <topic> - Searches Wikipedia for a topic",
+    "stop - Stops music or alarm",
+    "songs list / song list / music list - Lists available songs",
+    "play <song or genre> - Plays a specific song or genre",
+    "skip - Skips to another song in the same genre",
+    "volume <0-100> - Sets the system volume",
+    "is <server> up / how is <server> - Checks if a server is online",
+    "where do you live - Returns the assistant's IP address",
+    "shutdown / shut down - Exits the assistant",
+    "leave a note / record a note - Records a 10-second audio note",
+    "read my notes - Plays your last saved note",
+    "scan - Scans for nearby Bluetooth devices",
+    "connect <number> - Connects to a Bluetooth device",
+    "unpair <number> - Unpairs a Bluetooth device",
+    "set an alarm for <time> - Sets an alarm",
+    "timer <minutes> - Sets a timer",
+    "spell <word> - Spells a word",
+    "download song / get song <name> - Downloads a song from YouTube",
+    "play trivia / trivia game - Starts a trivia game",
+    "black - Plays a special music track"
+]
 
 
 
@@ -46,6 +73,12 @@ def handle_command(command, NAME,speaker_name):
         else:
          return f"Hello {speaker_name}! How can I help?"
         
+    elif "help" in command:
+        help_text = "Here are the commands you can use:\n"
+        for cmd in COMMANDS_LIST:
+            help_text += f"• {cmd}\n"
+        return help_text
+
     elif "who am i" in command:
         if speaker_name == None:
          return "I do not know you buy your name. ask me to remeber you as followed by your name and i will remeber you."
@@ -160,19 +193,6 @@ def handle_command(command, NAME,speaker_name):
         return f"Skipped! Now playing {next_track['filename'][:-4]} from genre '{current_genre}'"
       else:
         return f"Could not find the file {next_track['filename']} on disk."
-
-    elif "black" in command:
-        speak("Big Black Monky baby", True)
-        filepath = "data/music/nigga.mp3"
-        if os.path.exists(filepath):
-            if music_process and music_process.poll() is None:
-                music_process.terminate()
-            music_process = subprocess.Popen(["mpg123", filepath])
-            current_song = "nigga.mp3"
-            current_genre = "nigga"
-            return "ha ha"
-        else:
-            return "The file black.mp3 was not found."
 
 
     elif "volume" in command:
