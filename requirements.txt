@@ -1,0 +1,6 @@
+sudo apt install alsa-utils
+sudo apt install mpg123
+pip install pexpect
+sudo apt install mpv
+pip install sounddevice
+pip install yt-dlp
