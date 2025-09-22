@@ -343,16 +343,16 @@ def handle_command(command, NAME,speaker_name):
             return f"Bluetooth scan failed: {e}"
 
     elif "record my voice profile as" in command or "remember me as" in command:
-        match = re.search(r"record my voice profile as (\w+)", command)
+        match = re.search(r"(?:record my voice profile as|remember me as) (\w+)", command)
         if match:
             name = match.group(1)
             try:
-                # return record_and_save_voice_profile(name)
-                return create_combined_voice_sample(name,NAME)
+                return create_combined_voice_sample(name, NAME)
             except Exception as e:
                 return f"Failed to record voice profile: {e}"
         else:
             return "I couldn't understand the name. Please try again."
+
 
     elif "set an alarm for" in command:
      match = re.search(r"set an alarm for (\d{1,2})(?::(\d{2}))?\s*(am|pm)?", command)
