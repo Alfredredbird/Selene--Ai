@@ -1,3 +1,7 @@
-pip install pexpect
-pip install sounddevice
-pip install yt-dlp
+pexpect
+sounddevice
+yt-dlp
+asyncio
+threading
+numpy
+pydub

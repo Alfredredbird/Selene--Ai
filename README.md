@@ -82,7 +82,10 @@ Coming soon
 * mpg123
 * mpv
 * alsa-utils
-
+* asyncio
+* threading
+* numpy
+* pydub
 ---
 
 # 🗣️ Supported Languages

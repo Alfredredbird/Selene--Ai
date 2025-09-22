@@ -1,11 +1,11 @@
-from stt import listen
-from tts import speak
+from functions.stt import listen
+from .functionstts import speak
 from commands import handle_command
 from functions import cleanup_old_recordings, scan_ble, extract_song_metadata
 from identify import identify_speaker  
 import asyncio
 import threading
-from fuctions.tts import *
+from functions.tts import *
 from functools.stt import *
 
 WAKE_WORD = "selene"
