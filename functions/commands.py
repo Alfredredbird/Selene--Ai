@@ -79,6 +79,9 @@ def handle_command(command, NAME,speaker_name):
         else:
          return f"{speaker_name}" + f" The time is " + datetime.now().strftime("%H:%M")
     
+    if "shutdown computer" in command:
+         os.system("shutdown")
+
     elif "hello" in command:
         if speaker_name == None:
          return "Hi there! How can I help?"
