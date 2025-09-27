@@ -5,7 +5,11 @@ import psutil
 from pathlib import Path
 from functions.tts import *
 
-SYSTEM_INFO_FILE = Path.home() / ".selene/.selene_system_info.json"
+# Cross-platform user home path
+config_dir = Path.home() / ".selene"
+config_dir.mkdir(parents=True, exist_ok=True)  # ensure ~/.selene or %USERPROFILE%\.selene exists
+
+SYSTEM_INFO_FILE = config_dir / ".selene_system_info.json"
 
 def collect_system_info():
     """Collects system info and compares it to previous info if exists."""
@@ -33,7 +37,7 @@ def collect_system_info():
 
     if saved_info != current_info:
         speak("Looks like your system changed.", True)
-        # Optionally update saved info to new system
+        # Update saved info
         with open(SYSTEM_INFO_FILE, "w") as f:
             json.dump(current_info, f, indent=4)
         return False  # stop or handle as needed

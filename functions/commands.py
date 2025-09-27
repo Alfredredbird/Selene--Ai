@@ -79,8 +79,8 @@ def handle_command(command, NAME,speaker_name):
         else:
          return f"{speaker_name}" + f" The time is " + datetime.now().strftime("%H:%M")
     
-    if "shutdown computer" in command:
-         os.system("shutdown")
+    if "shutdown computer" in command or "shut down computer" in command:
+         os.system("shutdown now")
 
     elif "hello" in command:
         if speaker_name == None:
@@ -250,8 +250,7 @@ def handle_command(command, NAME,speaker_name):
     elif "where do you live" in command:
         return f"I live at {get_local_ip()}"
 
-    elif "shutdown" in command or "shut down" in command:
-        exit(9)
+
     
     elif "leave a note" in command or "record a note" in command:
         os.makedirs("data/notes", exist_ok=True)

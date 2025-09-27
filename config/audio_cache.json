@@ -30,5 +30,13 @@
   "It is 14:01": {
     "path": "audios/it_is_14:01.wav",
     "created": "2025-09-22 14:01:22"
+  },
+  "It is 12:46": {
+    "path": "audios/it_is_12:46.wav",
+    "created": "2025-09-26 12:46:54"
+  },
+  "Sorry, I do not know that command yet.": {
+    "path": "audios/sorry_i_do_not_know_that_command_yet.wav",
+    "created": "2025-09-26 12:47:42"
   }
 }
