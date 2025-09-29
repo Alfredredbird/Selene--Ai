@@ -21,7 +21,7 @@ import os
 from resemblyzer import VoiceEncoder, preprocess_wav
 from pydub import AudioSegment
 from functions.stt import listen
-
+import platform
 
 CONFIG_FOLDER = "config"
 CACHE_FILE = os.path.join(CONFIG_FOLDER, "audio_cache.json")
@@ -133,6 +133,29 @@ async def scan_ble():
         print(f"{d.address} - {d.name} (RSSI: {d.rssi})")
         print("=================================")
 
+def close_application(app_name, force=False):
+    system = platform.system()
+    try:
+        if system == "Darwin" or system == "Linux":  # macOS or Ubuntu/Linux
+            cmd = ["pkill"]
+            if force:
+                cmd.append("-9")
+            cmd.append(app_name)
+            subprocess.Popen(cmd)
+            return f"Closing {app_name}{' forcefully' if force else ''} on {system}."
+
+        elif system == "Windows":
+            cmd = ["taskkill", "/IM", f"{app_name}.exe"]
+            if force:
+                cmd.append("/F")
+            subprocess.Popen(cmd, shell=True)
+            return f"Closing {app_name}{' forcefully' if force else ''} on Windows."
+
+        else:
+            return f"Sorry, closing apps is not supported on {system}."
+    
+    except Exception as e:
+        return f"Failed to close {app_name}: {e}"
 
 def bluetooth_connect_worker(index, devices):
     try:
@@ -268,6 +291,36 @@ def detect_voice(audio, threshold=0.01):
     """Returns True if voice activity is detected based on RMS energy."""
     energy = np.sqrt(np.mean(audio**2))
     return energy > threshold
+
+
+
+def open_application(app_name):
+    system = platform.system()
+
+    try:
+        if system == "Darwin":  # macOS
+            subprocess.Popen(["open", "-a", app_name])
+            return f"Opening {app_name} on macOS."
+        
+        elif system == "Windows":
+           
+            subprocess.Popen(["start", "", app_name], shell=True)
+            return f"Opening {app_name} on Windows."
+        
+        elif system == "Linux":  # Ubuntu or others
+           
+            try:
+                subprocess.Popen([app_name])
+            except FileNotFoundError:
+                subprocess.Popen(["xdg-open", app_name])
+            return f"Opening {app_name} on Linux."
+        
+        else:
+            return f"Sorry, opening apps is not supported on {system}."
+    
+    except Exception as e:
+        return f"Failed to open {app_name}: {e}"
+
 
 def open_directory(command):
     """

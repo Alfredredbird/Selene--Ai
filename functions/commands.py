@@ -142,6 +142,23 @@ def handle_command(command, NAME,speaker_name):
                                   "open templates", "open snap", "open desktop"]):
         return open_directory(command)
 
+    elif command.startswith("open "):
+        app_name = command.replace("open", "", 1).strip()
+        if not app_name:
+            return "Please say the name of the application you want to open."
+        return open_application(app_name)
+
+    elif command.startswith("close "):
+        app_name = command.replace("close", "", 1).strip()
+        if not app_name:
+            return "Please say the name of the application you want to close."
+        return close_application(app_name, force=False)
+
+    elif command.startswith("force close ") or command.startswith("close -9 "):
+        app_name = command.replace("force close", "", 1).replace("close -9", "", 1).strip()
+        if not app_name:
+            return "Please say the name of the application you want to force close."
+        return close_application(app_name, force=True)
 
     elif "play" in command:
      command = command.replace("music", "")
