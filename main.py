@@ -3,7 +3,7 @@ from functions.recorder import start_audio_recording, start_screen_recording, st
 from functions.stt import listen
 from functions.tts import speak
 from functions.commands import handle_command
-from functions.functions import cleanup_old_recordings, scan_ble, extract_song_metadata
+from functions.functions import cleanup_old_recordings, scan_ble, extract_song_metadata, check_for_updates
 from functions.identify import identify_speaker  
 import asyncio
 import threading
@@ -20,6 +20,7 @@ def main():
     cleanup_old_recordings()
     cleanup_old_recordings("data/voice_clips")
     cleanup_old_recordings("data/screen_recordings")
+    check_for_updates()
     # this is for the screen clipping. its laggy so its disabled now
     # start_recording()
     # print("[INFO] Background recording started.")

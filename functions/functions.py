@@ -22,9 +22,13 @@ from resemblyzer import VoiceEncoder, preprocess_wav
 from pydub import AudioSegment
 from functions.stt import listen
 import platform
+import requests
 
 CONFIG_FOLDER = "config"
 CACHE_FILE = os.path.join(CONFIG_FOLDER, "audio_cache.json")
+REMOTE_VERSION_URL = "https://raw.githubusercontent.com/Alfredredbird/Selene--Ai/refs/heads/master/config/version.cfg"
+LOCAL_VERSION_PATH = "config/version.cfg"
+BRANCH = "master"
 
 def getFiles(directory_path):
     try:
@@ -461,3 +465,34 @@ def trivia_game():
     else:
         speak(result + " You lose!", True)
         return "Try again next time!"
+    
+def check_for_updates():
+    """Check remote vs local version, pull updates if needed."""
+    try:
+        # Fetch remote version
+        remote_version = requests.get(REMOTE_VERSION_URL, timeout=5).text.strip()
+
+        # Read local version
+        if os.path.exists(LOCAL_VERSION_PATH):
+            with open(LOCAL_VERSION_PATH, "r") as f:
+                local_version = f.read().strip()
+        else:
+            local_version = None
+
+        if local_version != remote_version:
+            print(f"[INFO] Update available: local={local_version}, remote={remote_version}")
+            speak("A new update is available. Updating now.", True)
+
+            # Run git pull
+            try:
+                subprocess.run(["git", "fetch", "origin", BRANCH], check=True)
+                subprocess.run(["git", "reset", "--hard", f"origin/{BRANCH}"], check=True)
+                speak("Update complete. Please restart me.", True)
+                exit(0)
+            except subprocess.CalledProcessError as e:
+                print(f"[ERROR] Failed to update: {e}")
+                speak("I tried to update, but something went wrong.", True)
+        else:
+            print("[INFO] Already up to date.")
+    except Exception as e:
+        print(f"[WARN] Could not check updates: {e}")
