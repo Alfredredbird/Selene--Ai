@@ -9,10 +9,10 @@ LOG_FILE="$DEST/selene.log"
 echo "[*] Creating destination directory..."
 mkdir -p "$DEST"
 
-# Copy files only if not already present
+# Copy files including hidden files (like .git) if not already present
 if [ ! -f "$DEST/main.py" ]; then
     echo "[*] Copying Selene files to $DEST..."
-    cp -r ~/Desktop/Selene\ -Ai/* "$DEST"
+    cp -r ~/Desktop/Selene\ -Ai/. "$DEST"
 else
     echo "[*] Selene files already copied"
 fi
