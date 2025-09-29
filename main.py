@@ -20,7 +20,7 @@ def main():
     cleanup_old_recordings()
     cleanup_old_recordings("data/voice_clips")
     cleanup_old_recordings("data/screen_recordings")
-    check_for_updates()
+    
     # this is for the screen clipping. its laggy so its disabled now
     # start_recording()
     # print("[INFO] Background recording started.")
@@ -80,3 +80,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    check_for_updates()

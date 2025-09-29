@@ -137,27 +137,38 @@ async def scan_ble():
         print(f"{d.address} - {d.name} (RSSI: {d.rssi})")
         print("=================================")
 
+
 def close_application(app_name, force=False):
     system = platform.system()
     try:
-        if system == "Darwin" or system == "Linux":  # macOS or Ubuntu/Linux
-            cmd = ["pkill"]
-            if force:
-                cmd.append("-9")
-            cmd.append(app_name)
-            subprocess.Popen(cmd)
+        if system in ["Darwin", "Linux"]:  # macOS or Linux
+            # Use pgrep to find process IDs case-insensitively
+            pgrep_cmd = ["pgrep", "-i", app_name]
+            proc = subprocess.run(pgrep_cmd, capture_output=True, text=True)
+            pids = proc.stdout.split()
+            
+            if not pids:
+                return f"No running process found for {app_name} on {system}."
+            
+            for pid in pids:
+                kill_cmd = ["kill"]
+                if force:
+                    kill_cmd.append("-9")
+                kill_cmd.append(pid)
+                subprocess.run(kill_cmd)
+            
             return f"Closing {app_name}{' forcefully' if force else ''} on {system}."
-
+        
         elif system == "Windows":
             cmd = ["taskkill", "/IM", f"{app_name}.exe"]
             if force:
                 cmd.append("/F")
-            subprocess.Popen(cmd, shell=True)
+            subprocess.run(cmd, shell=True)
             return f"Closing {app_name}{' forcefully' if force else ''} on Windows."
-
+        
         else:
             return f"Sorry, closing apps is not supported on {system}."
-    
+
     except Exception as e:
         return f"Failed to close {app_name}: {e}"
 
