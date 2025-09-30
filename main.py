@@ -3,7 +3,7 @@ from functions.recorder import start_audio_recording, start_screen_recording, st
 from functions.stt import listen
 from functions.tts import speak
 from functions.commands import handle_command, start_ssh_monitor
-from functions.watcher import start_multi_folder_watch
+# from functions.watcher import start_multi_folder_watch
 from functions.functions import cleanup_old_recordings, scan_ble, extract_song_metadata, check_for_updates
 from functions.identify import identify_speaker  
 import asyncio
@@ -88,5 +88,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    start_multi_folder_watch(dirs_to_watch)
+    # start_multi_folder_watch(dirs_to_watch)
     check_for_updates()
