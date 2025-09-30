@@ -39,7 +39,7 @@ fi
 # Step 3: Install Python packages
 echo "[*] Installing Python dependencies..."
 "$DEST/venv/bin/pip" install --upgrade pip
-"$DEST/venv/bin/pip" install pexpect sounddevice yt-dlp asyncio numpy pydub
+"$DEST/venv/bin/pip" install watchdog pexpect sounddevice yt-dlp asyncio numpy pydub
 
 # Step 4: Create user systemd service
 mkdir -p "$HOME/.config/systemd/user"
