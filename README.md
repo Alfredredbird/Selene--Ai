@@ -91,6 +91,7 @@ Coming soon
 * psutil
 * pathlib
 * platform
+* watchdog
 ---
 
 # 🗣️ Supported Languages

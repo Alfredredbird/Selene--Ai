@@ -10,3 +10,4 @@ json
 psutil
 pathlib
 platform
+watchdog

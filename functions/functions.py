@@ -23,12 +23,16 @@ from pydub import AudioSegment
 from functions.stt import listen
 import platform
 import requests
+import threading
+
 
 CONFIG_FOLDER = "config"
 CACHE_FILE = os.path.join(CONFIG_FOLDER, "audio_cache.json")
 REMOTE_VERSION_URL = "https://raw.githubusercontent.com/Alfredredbird/Selene--Ai/refs/heads/master/config/version.cfg"
 LOCAL_VERSION_PATH = "config/version.cfg"
 BRANCH = "master"
+
+SSH_LOG_FILE = "data/ssh_connections.json"
 
 def getFiles(directory_path):
     try:
@@ -507,3 +511,63 @@ def check_for_updates():
             print("[INFO] Already up to date.")
     except Exception as e:
         print(f"[WARN] Could not check updates: {e}")
+
+
+def load_ssh_log():
+    try:
+        with open(SSH_LOG_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+def save_ssh_log(log):
+    with open(SSH_LOG_FILE, "w") as f:
+        json.dump(log, f, indent=4)
+
+def get_current_ssh_users():
+    """
+    Returns a set of currently connected SSH usernames.
+    """
+    try:
+        result = subprocess.run(["who"], capture_output=True, text=True)
+        users = set()
+        for line in result.stdout.splitlines():
+            if "pts" in line or "ssh" in line:
+                users.add(line.split()[0])
+        return users
+    except Exception as e:
+        print(f"[ERROR] Failed to get SSH users: {e}")
+        return set()
+
+def monitor_ssh_connections(poll_interval=5):
+    """
+    Monitor SSH connections and announce connect/disconnect events.
+    """
+    known_users = load_ssh_log()
+    known_set = set(known_users.keys())
+
+    while True:
+        current_users = get_current_ssh_users()
+
+        # New connections
+        new_users = current_users - known_set
+        for user in new_users:
+            speak(f"SSH user {user} connected.")
+            known_users[user] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+        # Disconnections
+        disconnected_users = known_set - current_users
+        for user in disconnected_users:
+            speak(f"SSH user {user} disconnected.")
+            known_users.pop(user, None)
+
+        # Save log
+        save_ssh_log(known_users)
+
+        known_set = current_users
+        time.sleep(poll_interval)
+
+# Start the SSH monitor in a background thread
+def start_ssh_monitor():
+    thread = threading.Thread(target=monitor_ssh_connections, daemon=True)
+    thread.start()
